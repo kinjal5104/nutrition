@@ -1,0 +1,11 @@
+streamlit
+requests
+pandas
+sqlalchemy
+psycopg2-binary
+openfoodfacts
+pytrends
+transformers
+torch
+streamlit-authenticator
+python-dotenv
