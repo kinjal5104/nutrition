@@ -53,17 +53,35 @@ def run():
             margin-left: auto;
             margin-right: auto;
         }
+        /* Input styling */
+        .stTextInput {
+            width: 100% !important;
+        }
         .stTextInput>div>div>input {
             background: #fff !important;
             border: 2px solid #1da1f2 !important;
             border-radius: 8px !important;
             color: #222 !important;
-            font-size: 1.13rem !important;
+            font-size: 1.1rem !important;
+            padding: 0.6rem !important; /* smaller padding */
+            height: auto !important; /* no fixed height */
             box-shadow: 0 2px 8px #1da1f210 !important;
         }
         .stTextInput>div>div>input:focus {
             border: 2px solid #ff6f61 !important;
             background: #f4f8fb !important;
+        }
+        /* Hide default label */
+        div[data-testid="stTextInput"] label {
+            display: none !important;
+        }
+        /* Custom label style */
+        .custom-label {
+            font-size: 2rem;
+            color: #ff6f61;
+            text-align: center;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
         }
         </style>
         <div class="nutri-bg">
@@ -77,7 +95,15 @@ def run():
         unsafe_allow_html=True
     )
 
-    product_name = st.text_input("Enter product name:")
+    # Large custom label
+    st.markdown('<div class="custom-label">Enter product name</div>', unsafe_allow_html=True)
+
+    product_name = st.text_input(
+        "Product Name",  # Non-empty label for accessibility
+        key="big_input",
+        label_visibility="collapsed"  # Hides it visually
+    )
+
     if product_name:
         data = get_nutrition_data(product_name)
         products = data.get('openfoodfacts', [])
@@ -105,3 +131,6 @@ def run():
         st.markdown('<div class="nutri-table-container">', unsafe_allow_html=True)
         st.dataframe(df, use_container_width=True)
         st.markdown('</div>', unsafe_allow_html=True)
+
+if __name__ == "__main__":
+    run()
