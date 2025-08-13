@@ -4,6 +4,7 @@ import streamlit as st
 from app_pages import home, nutrition_info, reviews, social_trends, powerbi_dashboard, about
 
 # ---- GLOBAL STYLES ----
+
 st.markdown("""
     <style>
     /* App background */
@@ -13,11 +14,11 @@ st.markdown("""
     /* Softer sidebar (navbar) */
     [data-testid="stSidebar"] {
         background: linear-gradient(135deg, #e3f0fa 0%, #fbeeee 100%);
-        color: #222;
+        color: #222 !important;
         border-right: 1.5px solid #e0e0e0;
     }
-    [data-testid="stSidebar"] .css-1v3fvcr, [data-testid="stSidebar"] .css-1d391kg {
-        color: #222 !important;
+    [data-testid="stSidebar"] * {
+        color: #222 !important; /* Force dark text */
     }
     .stSidebar .st-radio label, .stSidebar .st-radio div {
         color: #222 !important;
@@ -25,6 +26,7 @@ st.markdown("""
     .stSidebar .stTitle {
         color: #1da1f2 !important;
     }
+
     /* Make input fields stand out */
     input, textarea, select, .stTextInput>div>div>input {
         background: #fff !important;
@@ -39,8 +41,16 @@ st.markdown("""
         outline: none !important;
         background: #f4f8fb !important;
     }
+
+    /* MOBILE FIX: Override Streamlit's white text on small screens */
+    @media (max-width: 768px) {
+        [data-testid="stSidebar"] * {
+            color: #222 !important;
+        }
+    }
     </style>
 """, unsafe_allow_html=True)
+
 
 PAGES = {
     "Home": home,
