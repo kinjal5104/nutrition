@@ -1,20 +1,12 @@
 import streamlit as st
 from etl.social_media import get_social_data
 from textwrap import shorten
+import re
 
 PLATFORM_STYLES = {
-    "Reddit": {
-        "color": "#FF4500",
-        "icon": "🔸"
-    },
-    "Twitter": {
-        "color": "#1DA1F2",
-        "icon": "🐦"
-    },
-    "YouTube": {
-        "color": "#FF0000",
-        "icon": "▶️"
-    }
+    "Reddit": {"color": "#FF4500", "icon": "🔸"},
+    "Twitter": {"color": "#1DA1F2", "icon": "🐦"},
+    "YouTube": {"color": "#FF0000", "icon": "▶️"}
 }
 
 def engagement_badge(post):
@@ -60,10 +52,6 @@ def run():
             margin-bottom: 2.2rem;
             text-align: center;
         }
-        .social-highlight {
-            color: #ffeb3b;
-            font-weight: 700;
-        }
         .social-post-card {
             border-radius: 12px;
             border: 1.5px solid #e3f0fa;
@@ -75,25 +63,33 @@ def run():
             margin-left: auto;
             margin-right: auto;
         }
-        .social-post-header {
-            display:flex;
-            align-items:center;
-            gap:10px;
+        /* Input styling */
+        .stTextInput {
+            width: 100% !important;
         }
-        .social-post-platform {
-            font-size:1.1rem;
-            font-weight:700;
+        .stTextInput>div>div>input {
+            background: #fff !important;
+            border: 2px solid #1da1f2 !important;
+            border-radius: 8px !important;
+            color: #222 !important;
+            font-size: 1.1rem !important;
+            padding: 0.6rem !important; /* smaller padding */
+            height: auto !important;
+            box-shadow: 0 2px 8px #1da1f210 !important;
         }
-        .social-post-user {
-            margin:0.5rem 0 0.2rem 0;
-            font-size:1.05rem;
-            color:#888;
+        .stTextInput>div>div>input:focus {
+            border: 2px solid #ff6f61 !important;
+            background: #f4f8fb !important;
         }
-        .social-post-text {
-            margin:0.5rem 0 0.7rem 0;
-            font-size:1.08rem;
-            line-height:1.6;
-            color:#222;
+        div[data-testid="stTextInput"] label {
+            display: none !important;
+        }
+        .custom-label {
+            font-size: 2rem;
+            color: #ff6f61;
+            text-align: center;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
         }
         </style>
         <div class="social-bg">
@@ -107,9 +103,13 @@ def run():
         unsafe_allow_html=True
     )
 
+    # Custom label above search bar
+    st.markdown('<div class="custom-label">🔍 Enter product name</div>', unsafe_allow_html=True)
+
     product_name = st.text_input(
-        "🔍 Enter product name (e.g., realme 5i, Nestle Pasta):",
+        "Product Name",  # Non-empty label for accessibility
         key="social_trends_input",
+        label_visibility="collapsed",
         help="Type a product name to see trending social media posts."
     )
 
@@ -121,14 +121,13 @@ def run():
             st.info("No social media mentions found.")
             return
 
-        # Sort by engagement if available
+        # Sort posts by engagement
         def engagement_score(post):
             if "likes" in post and post["likes"] is not None:
                 return post["likes"]
             if "upvotes" in post and post["upvotes"] is not None:
                 return post["upvotes"]
             if "engagement" in post:
-                import re
                 nums = re.findall(r"\d+", post["engagement"])
                 return int(nums[0]) if nums else 0
             return 0
@@ -155,3 +154,6 @@ def run():
                 """,
                 unsafe_allow_html=True
             )
+
+if __name__ == "__main__":
+    run()
