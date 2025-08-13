@@ -9,3 +9,6 @@ transformers
 torch
 streamlit-authenticator
 python-dotenv
+praw
+tweepy
+google-api-python-client
